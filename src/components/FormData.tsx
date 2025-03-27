@@ -31,7 +31,7 @@ function FormDataQuery() {
 
   return (
     <>
-      <div className="flex flex-row p-10 group gap-4 items-center border-b-2 transiton-all duration-300 ease-in-out hover:border-green-700 bg-neutral-50 hover:bg-white rounded-t-md">
+      <div className="flex flex-col px-10 py-4 group gap-4 items-start border-b-2 transiton-all duration-300 ease-in-out hover:border-green-700 bg-neutral-50 hover:bg-white rounded-t-md">
         <div className="flex flex-row items-center gap-2 group">
           <CiKeyboard className="text-gray-400 transition-colors ease-out duration-300 group-hover:text-gray-600 " size={35} />
           <span className="text-gray-500 text-md transition-colors ease-out duration-300 group-hover:text-gray-950">Input data</span>
@@ -43,10 +43,11 @@ function FormDataQuery() {
             <span className="text-sm text-gray-500 ">Show all details</span>
           </div>
           {/* <span className="bg-red-500">Hacer efecto click boton se hunde</span> */}
-        </div>
-        <div className="flex items-center w-1/6">
+          <div className="flex items-center w-1/6">
           <button onClick={submit} className="rounded-md border p-1 shadow-md px-12 transition-all ease-in-out duration-300 hover:bg-gray-100 hover:text-green-900 font-semibold" type="submit">Submit</button>
         </div>
+        </div>
+
       </div>
     </>
   )

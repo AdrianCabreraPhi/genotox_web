@@ -1,18 +1,12 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import Header from './components/Header'
 import FormDataQuery from './components/FormData'
 
-
 function App() {
-
-
   return (
     <>
-      <div className='h-screen w-full '>
-        <div className='header justify-center  flex flex-row bg-white rounded-b-xl transition-all ease-in-out duration-300     p-4'>
+      <div className="h-screen w-full bg-[url('./assets/background_genotox.png')] bg-cover bg-center ">
+        <div className='header  flex flex-row  rounded-b-xl transition-all ease-in-out duration-300     px-8 pt-4'>
           <Header />
         </div>
         <div className='components  flex flex-col bg-white w-auto transition-all ease-in-out duration-300 shadow-[0_8px_30px_rgb(0,0,0,0.12)]  h-5/6  m-8 rounded-xl '>
