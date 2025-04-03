@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { CiKeyboard } from "react-icons/ci";
 import * as genotoxApi from "../service/genotoxService";
+import { toast } from 'react-toastify';
+
 function FormDataQuery() {
   const [cas_rn, setCASRN] = useState<any>()
   const [showDetails, setShowDetails] = useState<any>(false)
@@ -8,25 +10,26 @@ function FormDataQuery() {
     setCASRN(event.target.value)
   };
 
+  // Form 
   const submit = async () => {
-    // e.preventDefault();
     const formData = new FormData();
     try {
-
       formData.append("cas_rn", cas_rn)
       formData.append("details", showDetails);
-      const result = await genotoxApi.query(formData)
-      console.log(result)
-
-
-
+      const result = await toast.promise(
+        genotoxApi.query(formData),
+        {
+          pending: "Processing data",
+          success: "Successfully",
+          error: "Error"
+        }
+      )
+     // Data result 
+      console.log(result.data.data)
     } catch (error: any) {
       console.log(error)
 
     }
-
-    console.log(cas_rn)
-    console.log(showDetails)
   }
 
   return (
