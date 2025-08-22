@@ -18,3 +18,11 @@ export const downloadData = async (formData:any) => {
   );
   return response;
 }
+
+export const getPieChartData = async (formData: any) => {
+  const response = await apiClient.post(
+    '/api/pie-chart/',
+    formData,
+  );
+  return response
+}
