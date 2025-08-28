@@ -1,7 +1,7 @@
 import { CiKeyboard } from "react-icons/ci";
 import { FaFileDownload } from "react-icons/fa";
 
-function FormDataQuery({ submit, onChangeInputcasrn, progressQuery, setShowDetails, showDetails, result, downloadData }) {
+function FormDataQuery({ submit,isLoading, onChangeInputcasrn, progressQuery, setShowDetails, showDetails, result, downloadData }) {
 
 
 
@@ -28,8 +28,9 @@ function FormDataQuery({ submit, onChangeInputcasrn, progressQuery, setShowDetai
         <span className="text-xs md:text-sm text-gray-500">Show all details</span>
       </div>
       <button
+      disabled={isLoading}
         onClick={submit}
-        className="cursor-pointer md:text-base text-sm m-auto md:m-0 transform hover:-translate-y-1 active:-translate-y-0 rounded-md border p-1 shadow-md px-12 text-neutral-500 transition-all ease-in-out duration-300 hover:bg-gray-100 hover:text-green-900 font-semibold"
+        className={`${isLoading && "cursor-not-allowed"}  cursor-pointer md:text-base text-sm m-auto md:m-0 transform hover:-translate-y-1 active:-translate-y-0 rounded-md border p-1 shadow-md px-12 text-neutral-500 transition-all ease-in-out duration-300 hover:bg-gray-100 hover:text-green-900 font-semibold`}
         type="submit"
       >
         Submit

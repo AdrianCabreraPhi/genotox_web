@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
-function VisualizeData({ result }) {
+function VisualizeData({ result,selectedDatabase,handleChangeDatabase,setSelectedDatabase }) {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
-
-
+  const keys = Object.keys(result);
 
   useEffect(() => {
     const handleResize = () => {
@@ -18,17 +17,12 @@ function VisualizeData({ result }) {
     };
   }, []);
 
-  const keys = Object.keys(result);
-  const [selectedDatabase, setSelectedDatabase] = useState("");
 
-    const handleChange = (event) => {
-    setSelectedDatabase(event.target.value);
-  };
 
 
 
   return (
-    <div className="flex flex-col h-full px-10 py-4">
+    <motion.div initial={{opacity:0}}   transition={{ duration: 0.3,delay:0.1  }} animate={{opacity:1}}  className="flex flex-col h-full px-10 py-4">
       {!isMobile && (
         <div className="flex flex-row flex-wrap gap-2  border-b border-dashed pb-[2vh]">
           {keys.map((key, index) => {
@@ -52,7 +46,7 @@ function VisualizeData({ result }) {
         </div>
       )}
       {isMobile  &&
-      <select className="bg-white border rounded   p-[1px]" value={selectedDatabase} onChange={handleChange} >
+      <select className="bg-white border rounded   p-[1px]" value={selectedDatabase} onChange={handleChangeDatabase} >
           {keys.map((key, index) => {
             if (result[key] !== null) {
               return (
@@ -81,7 +75,7 @@ function VisualizeData({ result }) {
             </div>
           ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
