@@ -70,7 +70,7 @@ function VisualizeData({ result,selectedDatabase,handleChangeDatabase,setSelecte
             >
               <span className="text-green-900 w-32 flex-none ">{value}</span>
               {result[selectedDatabase]["data"][idx].map((value) => (
-                <span className="flex-1 text-neutral-500"> {value} </span>
+                <span className={`flex-1   ${value == "Positive" ? "text-red-500" : "text-neutral-500"} `}> {value} </span>
               ))}
             </div>
           ))}

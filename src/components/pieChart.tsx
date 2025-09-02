@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 function PieChart({ cas_rn,setOption,setSelectedDatabase }) {
   const [data, setData] = useState<any>(undefined);
   const [databasesUI, setDatabasesUI] = useState(null);
+
   const formatData = (labels, data) => {
     const result = {
       Negative: [],
@@ -46,7 +47,7 @@ function PieChart({ cas_rn,setOption,setSelectedDatabase }) {
     }
 
     const colors = values.map((v, i) =>
-      labels[i].toLowerCase().includes("negative")
+      labels[i].toLowerCase().includes("positive")
         ? "red"
         : interpolateColor(v, min, max, "a7f3d0", "065f46")
     );
@@ -57,7 +58,7 @@ function PieChart({ cas_rn,setOption,setSelectedDatabase }) {
         labels: labels,
         type: "pie",
         marker: { colors: colors },
-        textinfo: "label+percent<br>",
+        textinfo: "percent",
         databases: databases,
       },
     ];
@@ -69,26 +70,22 @@ function PieChart({ cas_rn,setOption,setSelectedDatabase }) {
   }, []);
 
   const loadDatabase = (database)=> {
- 
     setSelectedDatabase(database)
     setOption("database")
-
-
   }
 
   const generateDatabaseButtons = (databases) => {
-   
     return (
-      // event para mandar el cambio de option a database y mostrar el database seleccionado , cargar visualizeddata, entonces pasarle setOption al pieChart
       <div className=" flex flex-wrap px-1 gap-2">
         {databases.map((database, i) => (
-          <button
+          <motion.button
+          initial={{opacity:0}}   transition={{ duration: 0.3 }} animate={{opacity:1}} 
             key={i}
             onClick={() =>  loadDatabase(database) }
             className="text-gray-500 hover:shadow-green-900/30 min-w-44 transition-all duration-300 ease-in-out rounded hover:text-black  shadow-md  p-1 transform hover:-translate-y-1"
           >
             {database}
-          </button>
+          </motion.button>
         ))}
       </div>
     );
@@ -96,7 +93,7 @@ function PieChart({ cas_rn,setOption,setSelectedDatabase }) {
 
   return (
     <>
-    <motion.div initial={{opacity:0}}   transition={{ duration: 1,delay:0.1 }} animate={{opacity:1}}  className="  max-w-lg mx-auto">
+    <motion.div initial={{opacity:0}}   transition={{ duration: 1,delay:0.1 }} animate={{opacity:1}}  className=" mt-2 max-w-lg mx-auto">
       {data && (
         <Plot
           onClick={(e) =>
@@ -114,7 +111,7 @@ function PieChart({ cas_rn,setOption,setSelectedDatabase }) {
         />
       )}
       <div className="text-center text-sm  antialiased m-2">
-        <span className="bg-neutral-50  p-1 rounded-md   border border-neutral-100">
+        <span className="bg-neutral-50 text-neutral-500  p-1 rounded-md   border border-neutral-100">
           Click chart to see databases
         </span>
       </div>

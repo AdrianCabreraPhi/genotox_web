@@ -9,6 +9,7 @@ import VisualizeData from "./components/VisualizeData";
 import saveBlobAsExcel from "./utils/saveBlobAsExcel";
 import { FiPieChart,FiDatabase } from "react-icons/fi";
 import PieChart from "./components/pieChart";
+import {motion} from "framer-motion";
 
 function App() {
   const [cas_rn, setCASRN] = useState<any>();
@@ -80,11 +81,12 @@ function App() {
 
         siguePidiendoProgreso = false;
 
+ 
         toast.update(toastId, {
           render: "Successfully",
           type: "success",
           isLoading: false,
-          autoClose: 3000,
+          autoClose: 2000,
         });
         setProgressQuery(100);
         setResult(result.data.data);
@@ -107,11 +109,9 @@ function App() {
     iniciarProceso();
   };
 
+
+
   const downloadData = async () => {
-    console.log("cas_rn:")
-    console.log(cas_rn)
-    console.log("data:")
-    console.log(showDetails)
     const formData = { cas_rn: cas_rn, data: result };
     const response = await genotoxApi.downloadData(formData);
     const blob = new Blob([response.data], {
@@ -120,10 +120,12 @@ function App() {
     saveBlobAsExcel(blob, `gt_result_${cas_rn}.xlsx`);
   };
 
+
+
   return (
     <>
-      <div className="h-screen w-full bg-gradient-to-b from-white via-white to-green-800  ">
-        <div className="header  flex flex-row justify-center  rounded-b-xl transition-all ease-in-out duration-300     px-8 pt-4">
+      <div className="h-screen w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#fff_0%,#fff_40%,#064e3b_100%)] bg-[size:14px_24px,14px_24px,auto]  ">
+        <div className="header  flex flex-row justify-center  rounded-b-xl transition-all ease-in-out duration-300 pt-2 ">
           <Header />
         </div>
         <div className="components  flex flex-col bg-white w-auto transition-all ease-in-out duration-300 shadow-2xl h-5/6 m-8 rounded-md">
@@ -133,12 +135,11 @@ function App() {
             result={result}
             submit={submit}
             onChangeInputcasrn={onChangeInputcasrn}
-            progressQuery={progressQuery}
             setShowDetails={setShowDetails}
             showDetails={showDetails}
           />
           {result && (
-            <div className="group-button m-auto flex mt-3  border rounded">
+            <div className="group-button m-auto flex mt-3 shadow-md  border rounded">
               <button onClick={()=> setOption("chart")} className={` ${option == "chart" ? "bg-gray-100" : ""} flex items-center gap-1 transition-all duration-300 ease-in-out group border-r p-2 hover:bg-neutral-100`}>
                 <FiPieChart
                   size={18}
@@ -153,7 +154,15 @@ function App() {
               </button>
             </div>
           )}
-       <div className="flex-1 overflow-hidden">
+       <div className="flex-1  overflow-hidden">
+         {isLoading &&
+  <div className="flex flex-col gap-8 items-center h-full justify-center">
+         <motion.span initial={{y:0}} transition={{duration:2,repeat: Infinity,ease:"linear"}} animate={{y:[30,0,30]}} className="block w-7 h-7 rounded-full bg-[#175542]"></motion.span>
+         <motion.span  transition={{duration:2,repeat:Infinity}} animate={{width:[50,0,50]}} className=" rounded-lg  h-4 block bg-neutral-100"> </motion.span>
+    </div>
+    
+          } 
+
           {result && option == "chart" && (
             <PieChart setSelectedDatabase={setSelectedDatabase} setOption={setOption} cas_rn={cas_rn}/>
 
