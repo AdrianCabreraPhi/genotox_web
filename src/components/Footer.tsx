@@ -1,7 +1,7 @@
 function Footer() {
   return (
     <>
-      <div className=" text-center  flex flex-col">
+      <div className=" text-center mt-auto mb-6  flex flex-col">
         <span className="  text-sm text-white opacity-100">
           2025 Genotox DataBase. Version 0.0.1.{" "}
         </span>

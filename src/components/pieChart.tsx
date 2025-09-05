@@ -83,7 +83,7 @@ function PieChart({ cas_rn,setHoverEffectDatabases }) {
           data={data}
           layout={{ autosize: true, font: { color: "green" }}}
           useResizeHandler={true}
-          className="w-96 md:w-[100%] "
+          className="w-96 lg:w-[100%] "
     
         />
       )}

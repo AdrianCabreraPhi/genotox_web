@@ -119,11 +119,11 @@ function App() {
 
   return (
     <>
-      <div className="h-screen w-full bg-[linear-gradient(to_bottom,#fff_0%,#fff_40%,#064e3b_100%)]">
+      <div className="min-h-screen w-full bg-[linear-gradient(to_bottom,#fff_0%,#fff_40%,#064e3b_100%)] flex flex-col">
         <div className="header  flex flex-row justify-center  rounded-b-xl transition-all ease-in-out duration-300 pt-2 ">
           <Header />
         </div>
-        <div className="components  flex flex-col bg-white w-auto transition-all ease-in-out duration-300 shadow-2xl h-5/6 m-8 rounded-md">
+        <div className="components  flex flex-col bg-white w-auto transition-all ease-in-out duration-300 shadow-2xl flex-grow m-8 rounded-md">
           <FormDataQuery
             isLoading={isLoading}
             downloadData={downloadData}
@@ -133,14 +133,13 @@ function App() {
             setShowDetails={setShowDetails}
             showDetails={showDetails}
           />
-          <div className="flex-1  overflow-hidden">
-            {isLoading && (
-              <Loader />
-            )}
 
+          {isLoading && <Loader />}
+
+          <div className="flex-1  overflow-hidden">
             {result && (
               <>
-                              <VisualizeData
+                <VisualizeData
                   setSelectedDatabase={setSelectedDatabase}
                   hoverEffectDatabases={hoverEffectDatabases}
                   result={result}
@@ -151,11 +150,11 @@ function App() {
                   cas_rn={cas_rn}
                   setHoverEffectDatabases={setHoverEffectDatabases}
                 />
-
               </>
             )}
           </div>
         </div>
+
         <Footer />
       </div>
       <ToastContainer />
