@@ -7,37 +7,37 @@ import * as genotoxApi from "./service/genotoxService";
 import { toast } from "react-toastify";
 import VisualizeData from "./components/VisualizeData";
 import saveBlobAsExcel from "./utils/saveBlobAsExcel";
-import { FiPieChart,FiDatabase } from "react-icons/fi";
+import { FiPieChart, FiDatabase } from "react-icons/fi";
 import PieChart from "./components/pieChart";
-import {motion} from "framer-motion";
-
+import { AnimatePresence, motion } from "framer-motion";
+import { IoMdClose } from "react-icons/io";
 function App() {
-  const [cas_rn, setCASRN] = useState<any>();
-  const [showDetails, setShowDetails] = useState<any>(false);
-  const [progressQuery, setProgressQuery] = useState<number>(0);
-  const [result, setResult] = useState<any>(false);
-  const [option,setOption] = useState<string>("chart");
-  const [isLoading,setLoading] = useState<boolean>(false)
-  const [selectedDatabase, setSelectedDatabase] = useState("");
+  const [cas_rn, setCASRN] = useState<string>("");
+  const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [, setProgressQuery] = useState<number>(0);
+  const [result, setResult] = useState<object | boolean>(false);
+  const [hoverEffectDatabases, setHoverEffectDatabases] = useState<object>({});
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [selectedDatabase, setSelectedDatabase] = useState<string | undefined>(
+    undefined
+  );
 
-  const handleChangeDatabase = (event) => {
+  const handleChangeDatabase = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setSelectedDatabase(event.target.value);
   };
 
-
-
-  const onChangeInputcasrn = (event) => {
+  const onChangeInputcasrn = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCASRN(event.target.value);
   };
 
   // Form
   const submit = async () => {
-    setOption("chart")
-    setLoading(true)
+    setLoading(true);
     setResult(false);
     let siguePidiendoProgreso = true;
 
- 
     const toastId = toast.loading("Processing data 0%");
 
     async function sondearProgreso() {
@@ -49,7 +49,6 @@ function App() {
       setProgressQuery(progress);
       toast.update(toastId, { render: `Processing data ${progress}%` });
 
- 
       if (progress < 100) {
         setTimeout(sondearProgreso, 1000);
       }
@@ -58,13 +57,11 @@ function App() {
     async function iniciarProceso() {
       const formData = new FormData();
       formData.append("cas_rn", cas_rn);
-      formData.append("details", showDetails);
+      formData.append("details", showDetails.toString());
 
       try {
-       
         setTimeout(sondearProgreso, 500);
 
-     
         const result = await genotoxApi.query(formData);
 
         if (!result.data.download_ready) {
@@ -75,13 +72,12 @@ function App() {
             autoClose: 3000,
           });
           siguePidiendoProgreso = false;
-          setLoading(false)
+          setLoading(false);
           return;
         }
 
         siguePidiendoProgreso = false;
 
- 
         toast.update(toastId, {
           render: "Successfully",
           type: "success",
@@ -89,14 +85,15 @@ function App() {
           autoClose: 2000,
         });
         setProgressQuery(100);
+        console.log("VER QUE TIPO:");
+        console.log(result.data.data);
         setResult(result.data.data);
-        setLoading(false)
-
+        setLoading(false);
       } catch (error) {
         console.error(error);
         siguePidiendoProgreso = false;
-        setLoading(false)
-      
+        setLoading(false);
+
         toast.update(toastId, {
           render: "Error",
           type: "error",
@@ -109,8 +106,6 @@ function App() {
     iniciarProceso();
   };
 
-
-
   const downloadData = async () => {
     const formData = { cas_rn: cas_rn, data: result };
     const response = await genotoxApi.downloadData(formData);
@@ -120,11 +115,9 @@ function App() {
     saveBlobAsExcel(blob, `gt_result_${cas_rn}.xlsx`);
   };
 
-
-
   return (
     <>
-      <div className="h-screen w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#fff_0%,#fff_40%,#064e3b_100%)] bg-[size:14px_24px,14px_24px,auto]  ">
+      <div className="h-screen w-full bg-[linear-gradient(to_bottom,#fff_0%,#fff_40%,#064e3b_100%)]">
         <div className="header  flex flex-row justify-center  rounded-b-xl transition-all ease-in-out duration-300 pt-2 ">
           <Header />
         </div>
@@ -138,42 +131,41 @@ function App() {
             setShowDetails={setShowDetails}
             showDetails={showDetails}
           />
-          {result && (
-            <div className="group-button m-auto flex mt-3 shadow-md  border rounded">
-              <button onClick={()=> setOption("chart")} className={` ${option == "chart" ? "bg-gray-100" : ""} flex items-center gap-1 transition-all duration-300 ease-in-out group border-r p-2 hover:bg-neutral-100`}>
-                <FiPieChart
-                  size={18}
+          <div className="flex-1  overflow-hidden">
+            {isLoading && (
+              <div className="flex flex-col gap-8 items-center h-full justify-center">
+                <motion.span
+                  initial={{ y: 0 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  animate={{ y: [30, 0, 30] }}
+                  className="block w-7 h-7 rounded-full bg-[#175542]"
+                ></motion.span>
+                <motion.span
+                  transition={{ duration: 2, repeat: Infinity }}
+                  animate={{ width: [50, 0, 50] }}
+                  className=" rounded-lg  h-4 block bg-neutral-100"
+                >
+                  {" "}
+                </motion.span>
+              </div>
+            )}
+
+            {result && (
+              <>
+                <PieChart
+                  cas_rn={cas_rn}
+                  setHoverEffectDatabases={setHoverEffectDatabases}
                 />
-                <span className="text-sm">Chart</span>
-              </button>
-              <button onClick={()=> setOption("database")} className={` ${option == "database" ? "bg-gray-100" : ""} flex items-center gap-1 transition-all duration-300 ease-in-out group border-r p-2 hover:bg-neutral-100`}>
-                <FiDatabase
-                  size={18}
+                <VisualizeData
+                  setSelectedDatabase={setSelectedDatabase}
+                  hoverEffectDatabases={hoverEffectDatabases}
+                  result={result}
+                  selectedDatabase={selectedDatabase}
+                  handleChangeDatabase={handleChangeDatabase}
                 />
-                <span className="text-sm">database</span>
-              </button>
-            </div>
-          )}
-       <div className="flex-1  overflow-hidden">
-         {isLoading &&
-  <div className="flex flex-col gap-8 items-center h-full justify-center">
-         <motion.span initial={{y:0}} transition={{duration:2,repeat: Infinity,ease:"linear"}} animate={{y:[30,0,30]}} className="block w-7 h-7 rounded-full bg-[#175542]"></motion.span>
-         <motion.span  transition={{duration:2,repeat:Infinity}} animate={{width:[50,0,50]}} className=" rounded-lg  h-4 block bg-neutral-100"> </motion.span>
-    </div>
-    
-          } 
-
-          {result && option == "chart" && (
-            <PieChart setSelectedDatabase={setSelectedDatabase} setOption={setOption} cas_rn={cas_rn}/>
-
-          )}
-
-          {result && option == "database" && (
-     
-      <VisualizeData  setSelectedDatabase={setSelectedDatabase} result={result} selectedDatabase={selectedDatabase} handleChangeDatabase={handleChangeDatabase}  /> 
-          
-          )}
-            </div>
+              </>
+            )}
+          </div>
         </div>
         <div className=" text-center  flex flex-col">
           <span className="  text-sm text-white opacity-100">
@@ -203,6 +195,48 @@ function App() {
         </div>
       </div>
       <ToastContainer />
+          <AnimatePresence>
+      {result && selectedDatabase && (
+  <motion.div
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  exit={{ opacity: 0}}
+  className="fixed shadow p-1 ring-2 ring-neutral-200 rounded-md  
+             w-[95%] h-[95%] bg-neutral-100 top-[1%] left-[2.5%] flex flex-col"
+>
+  <div className="flex justify-between bg-white p-2 rounded-t-md flex-none">
+    <div>
+      <span>Database:</span> <span className="text-green-800 font-semibold">{selectedDatabase}</span>
+    </div>
+    <span className="rounded-full p-1 cursor-pointer opacity-70 hover:opacity-100 transition  group bg-red-400" onClick={() => setSelectedDatabase(undefined)}><IoMdClose className="text-neutral-100" size={20}/></span>
+  </div>
+
+  <div className="bg-white flex-1 rounded-b-md overflow-auto p-2">
+    {selectedDatabase &&
+      result[selectedDatabase]["index"].map((value, idx) => (
+        <div
+          key={idx}
+          className="flex flex-row gap-20 items-start border-b border-neutral-100"
+        >
+          <span className="text-green-900 w-32 flex-none">
+            {value}
+          </span>
+          {result[selectedDatabase]["data"][idx].map((value) => (
+            <span
+              className={`flex-1 ${
+                value == "Positive" ? "text-red-500" : "text-neutral-500"
+              }`}
+            >
+              {value}
+            </span>
+          ))}
+        </div>
+      ))}
+  </div>
+</motion.div>
+
+      )}
+      </AnimatePresence>
     </>
   );
 }

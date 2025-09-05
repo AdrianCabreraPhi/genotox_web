@@ -2,9 +2,8 @@ import Plot from "react-plotly.js";
 import { useEffect, useState } from "react";
 import * as genotoxApi from "../service/genotoxService";
 import { motion } from "framer-motion";
-function PieChart({ cas_rn,setOption,setSelectedDatabase }) {
+function PieChart({ cas_rn,setHoverEffectDatabases }) {
   const [data, setData] = useState<any>(undefined);
-  const [databasesUI, setDatabasesUI] = useState(null);
 
   const formatData = (labels, data) => {
     const result = {
@@ -69,40 +68,18 @@ function PieChart({ cas_rn,setOption,setSelectedDatabase }) {
     getData();
   }, []);
 
-  const loadDatabase = (database)=> {
-    setSelectedDatabase(database)
-    setOption("database")
-  }
 
-  const generateDatabaseButtons = (databases) => {
-    return (
-      <div className=" flex flex-wrap px-1 gap-2">
-        {databases.map((database, i) => (
-          <motion.button
-          initial={{opacity:0}}   transition={{ duration: 0.3 }} animate={{opacity:1}} 
-            key={i}
-            onClick={() =>  loadDatabase(database) }
-            className="text-gray-500 hover:shadow-green-900/30 min-w-44 transition-all duration-300 ease-in-out rounded hover:text-black  shadow-md  p-1 transform hover:-translate-y-1"
-          >
-            {database}
-          </motion.button>
-        ))}
-      </div>
-    );
-  };
+
+
 
   return (
     <>
     <motion.div initial={{opacity:0}}   transition={{ duration: 1,delay:0.1 }} animate={{opacity:1}}  className=" mt-2 max-w-lg mx-auto">
       {data && (
         <Plot
-          onClick={(e) =>
-            setDatabasesUI(
-              generateDatabaseButtons(
-                e.points[0].data.databases[e.points[0].label]
-              )
-            )
-          }
+
+          // onUnhover={() => setHoverEffectDatabases({})} other option
+          onHover={(e) => setHoverEffectDatabases({"color":e.points[0].color,"databases":e.points[0].data.databases[e.points[0].label]})}
           data={data}
           layout={{ autosize: true, font: { color: "green" } }}
           useResizeHandler={true}
@@ -110,13 +87,9 @@ function PieChart({ cas_rn,setOption,setSelectedDatabase }) {
           className="cursor-pointer"
         />
       )}
-      <div className="text-center text-sm  antialiased m-2">
-        <span className="bg-neutral-50 text-neutral-500  p-1 rounded-md   border border-neutral-100">
-          Click chart to see databases
-        </span>
-      </div>
+
     </motion.div>
-       {databasesUI}
+
     </>
   );
 }

@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-function VisualizeData({ result,selectedDatabase,handleChangeDatabase,setSelectedDatabase }) {
+function VisualizeData({
+  result,
+  selectedDatabase,
+  handleChangeDatabase,
+  setSelectedDatabase,
+  hoverEffectDatabases,
+}) {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const keys = Object.keys(result);
 
@@ -17,26 +23,36 @@ function VisualizeData({ result,selectedDatabase,handleChangeDatabase,setSelecte
     };
   }, []);
 
-
-
-
-
   return (
-    <motion.div initial={{opacity:0}}   transition={{ duration: 0.3,delay:0.1  }} animate={{opacity:1}}  className="flex flex-col h-full px-10 py-4">
+    <motion.div
+      initial={{ opacity: 0 }}
+      transition={{ duration: 0.3, delay: 0.1 }}
+      animate={{ opacity: 1 }}
+      className="flex flex-col h-full px-10 py-4"
+    >
       {!isMobile && (
-        <div className="flex flex-row flex-wrap gap-2  border-b border-dashed pb-[2vh]">
+        <div className="flex flex-row flex-wrap gap-2">
           {keys.map((key, index) => {
-            const isActive = selectedDatabase === key;
+            let  isActive = undefined
+            if(Object.keys(hoverEffectDatabases).length > 0) {
+                isActive =  hoverEffectDatabases["databases"].includes(key);
+            }else {
+              isActive = false;
+            }
+
             if (result[key] !== null) {
               return (
                 <button
                   className={`${
-                    isActive
-                      ? "shadow-green-900/30 text-black"
-                      : "text-gray-500"
-                  }  hover:shadow-green-900/30 min-w-44 transition-all duration-300 ease-in-out rounded hover:text-black  shadow-md  p-1 transform hover:-translate-y-1`}
+                    isActive ? "text-white" : "text-gray-500"
+                  }  min-w-44 opacity-70 hover:opacity-100 transition-all duration-300 ease-in-out rounded shadow-md p-1 transform hover:-translate-y-1`}
+                  style={{
+                    backgroundColor: isActive
+                      ? hoverEffectDatabases["color"]
+                      : "transparent",
+                  }}
                   key={index}
-                  onClick={() => setSelectedDatabase(key)}
+                   onClick={() => setSelectedDatabase(key)}
                 >
                   {key}
                 </button>
@@ -45,36 +61,19 @@ function VisualizeData({ result,selectedDatabase,handleChangeDatabase,setSelecte
           })}
         </div>
       )}
-      {isMobile  &&
-      <select className="bg-white border rounded   p-[1px]" value={selectedDatabase} onChange={handleChangeDatabase} >
+      {isMobile && Object.keys(hoverEffectDatabases).length > 0 && (
+        <select
+          className="bg-white border rounded   p-[1px]"
+          value={selectedDatabase}
+          onChange={handleChangeDatabase}
+        >
           {keys.map((key, index) => {
             if (result[key] !== null) {
-              return (
-                <option
-             
-                value={key}
-                >
-                  {key}
-                </option>
-              );
+              return <option value={key}>{key}</option>;
             }
           })}
-      </select>
-      }
-      <div className="mt-[2vh] flex-1 overflow-auto">
-        {selectedDatabase &&
-          result[selectedDatabase]["index"].map((value, idx) => (
-            <div
-              key={idx}
-              className="flex flex-row gap-20  items-start border-b  border-neutral-100 "
-            >
-              <span className="text-green-900 w-32 flex-none ">{value}</span>
-              {result[selectedDatabase]["data"][idx].map((value) => (
-                <span className={`flex-1   ${value == "Positive" ? "text-red-500" : "text-neutral-500"} `}> {value} </span>
-              ))}
-            </div>
-          ))}
-      </div>
+        </select>
+      )}
     </motion.div>
   );
 }
