@@ -7,10 +7,12 @@ import * as genotoxApi from "./service/genotoxService";
 import { toast } from "react-toastify";
 import VisualizeData from "./components/VisualizeData";
 import saveBlobAsExcel from "./utils/saveBlobAsExcel";
-import { FiPieChart, FiDatabase } from "react-icons/fi";
 import PieChart from "./components/pieChart";
 import { AnimatePresence, motion } from "framer-motion";
-import { IoMdClose } from "react-icons/io";
+import ModalInformationDatabase from "./components/ModalInformationDatabase";
+import Footer from "./components/Footer";
+import Loader from "./components/Loader";
+
 function App() {
   const [cas_rn, setCASRN] = useState<string>("");
   const [showDetails, setShowDetails] = useState<boolean>(false);
@@ -133,21 +135,7 @@ function App() {
           />
           <div className="flex-1  overflow-hidden">
             {isLoading && (
-              <div className="flex flex-col gap-8 items-center h-full justify-center">
-                <motion.span
-                  initial={{ y: 0 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  animate={{ y: [30, 0, 30] }}
-                  className="block w-7 h-7 rounded-full bg-[#175542]"
-                ></motion.span>
-                <motion.span
-                  transition={{ duration: 2, repeat: Infinity }}
-                  animate={{ width: [50, 0, 50] }}
-                  className=" rounded-lg  h-4 block bg-neutral-100"
-                >
-                  {" "}
-                </motion.span>
-              </div>
+              <Loader />
             )}
 
             {result && (
@@ -167,75 +155,25 @@ function App() {
             )}
           </div>
         </div>
-        <div className=" text-center  flex flex-col">
-          <span className="  text-sm text-white opacity-100">
-            2025 Genotox DataBase. Version 0.0.1.{" "}
-          </span>
-          <span className="  text-sm text-white opacity-75">
-            For maximum safety cross-check{" "}
-            <span className="font-semibold opacity-100">
-              {" "}
-              <a
-                className="cursor-pointer transtiion-all duration-300 ease-in-out"
-                target="_blank"
-                href="https://www.echemportal.org/echemportal/"
-              >
-                eChemPortal
-              </a>{" "}
-              ,Lhasa Vitic,{" "}
-              <a
-                className="cursor-pointer transtiion-all duration-300 ease-in-out"
-                target="_blank"
-                href="https://lcdb.lhasacloud.org/login"
-              >
-                Lhasa CDB
-              </a>{" "}
-            </span>{" "}
-          </span>
-        </div>
+        <Footer />
       </div>
       <ToastContainer />
-          <AnimatePresence>
-      {result && selectedDatabase && (
-  <motion.div
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  exit={{ opacity: 0}}
-  className="fixed shadow p-1 ring-2 ring-neutral-200 rounded-md  
+      <AnimatePresence>
+        {result && selectedDatabase && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed shadow p-1 ring-2 ring-neutral-200 rounded-md  
              w-[95%] h-[95%] bg-neutral-100 top-[1%] left-[2.5%] flex flex-col"
->
-  <div className="flex justify-between bg-white p-2 rounded-t-md flex-none">
-    <div>
-      <span>Database:</span> <span className="text-green-800 font-semibold">{selectedDatabase}</span>
-    </div>
-    <span className="rounded-full p-1 cursor-pointer opacity-70 hover:opacity-100 transition  group bg-red-400" onClick={() => setSelectedDatabase(undefined)}><IoMdClose className="text-neutral-100" size={20}/></span>
-  </div>
-
-  <div className="bg-white flex-1 rounded-b-md overflow-auto p-2">
-    {selectedDatabase &&
-      result[selectedDatabase]["index"].map((value, idx) => (
-        <div
-          key={idx}
-          className="flex flex-row gap-20 items-start border-b border-neutral-100"
-        >
-          <span className="text-green-900 w-32 flex-none">
-            {value}
-          </span>
-          {result[selectedDatabase]["data"][idx].map((value) => (
-            <span
-              className={`flex-1 ${
-                value == "Positive" ? "text-red-500" : "text-neutral-500"
-              }`}
-            >
-              {value}
-            </span>
-          ))}
-        </div>
-      ))}
-  </div>
-</motion.div>
-
-      )}
+          >
+            <ModalInformationDatabase
+              result={result}
+              selectedDatabase={selectedDatabase}
+              setSelectedDatabase={setSelectedDatabase}
+            />
+          </motion.div>
+        )}
       </AnimatePresence>
     </>
   );
