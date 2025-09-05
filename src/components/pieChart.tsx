@@ -74,17 +74,17 @@ function PieChart({ cas_rn,setHoverEffectDatabases }) {
 
   return (
     <>
-    <motion.div initial={{opacity:0}}   transition={{ duration: 1,delay:0.1 }} animate={{opacity:1}}  className=" mt-2 max-w-lg mx-auto">
+    <motion.div initial={{opacity:0}}   transition={{ duration: 1,delay:0.1 }} animate={{opacity:1}}  className=" mt-2 max-w-lg mx-auto flex justify-center items-center">
       {data && (
         <Plot
 
-          // onUnhover={() => setHoverEffectDatabases({})} other option
+          // onUnhover={() => setHoverEffectDatabases({})} 
           onHover={(e) => setHoverEffectDatabases({"color":e.points[0].color,"databases":e.points[0].data.databases[e.points[0].label]})}
           data={data}
-          layout={{ autosize: true, font: { color: "green" } }}
+          layout={{ autosize: true, font: { color: "green" }}}
           useResizeHandler={true}
-          style={{ width: "100%", height: "100%" }}
-          className="cursor-pointer"
+          className="w-96 md:w-[100%] "
+    
         />
       )}
 

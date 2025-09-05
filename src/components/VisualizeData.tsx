@@ -28,7 +28,7 @@ function VisualizeData({
       initial={{ opacity: 0 }}
       transition={{ duration: 0.3, delay: 0.1 }}
       animate={{ opacity: 1 }}
-      className="flex flex-col h-full px-10 py-4"
+      className="flex flex-col px-1 py-1"
     >
       {!isMobile && (
         <div className="flex flex-row flex-wrap gap-2">
@@ -44,12 +44,13 @@ function VisualizeData({
               return (
                 <button
                   className={`${
-                    isActive ? "text-white" : "text-gray-500"
-                  }  min-w-44 opacity-70 hover:opacity-100 transition-all duration-300 ease-in-out rounded shadow-md p-1 transform hover:-translate-y-1`}
+                    isActive ? "text-black" : "text-gray-500"
+                  }  min-w-44 opacity-70 hover:opacity-100 hover:text-black transition-all duration-300 ease-in-out rounded shadow-md p-1 transform hover:-translate-y-1`}
                   style={{
-                    backgroundColor: isActive
-                      ? hoverEffectDatabases["color"]
-                      : "transparent",
+                    boxShadow: isActive
+                      && `1px 1px 1px 1px ${hoverEffectDatabases["color"]}`,
+                      
+                    
                   }}
                   key={index}
                    onClick={() => setSelectedDatabase(key)}
@@ -61,7 +62,7 @@ function VisualizeData({
           })}
         </div>
       )}
-      {isMobile && Object.keys(hoverEffectDatabases).length > 0 && (
+      {isMobile  && (
         <select
           className="bg-white border rounded   p-[1px]"
           value={selectedDatabase}

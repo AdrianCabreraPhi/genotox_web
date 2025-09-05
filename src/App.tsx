@@ -140,17 +140,18 @@ function App() {
 
             {result && (
               <>
-                <PieChart
-                  cas_rn={cas_rn}
-                  setHoverEffectDatabases={setHoverEffectDatabases}
-                />
-                <VisualizeData
+                              <VisualizeData
                   setSelectedDatabase={setSelectedDatabase}
                   hoverEffectDatabases={hoverEffectDatabases}
                   result={result}
                   selectedDatabase={selectedDatabase}
                   handleChangeDatabase={handleChangeDatabase}
                 />
+                <PieChart
+                  cas_rn={cas_rn}
+                  setHoverEffectDatabases={setHoverEffectDatabases}
+                />
+
               </>
             )}
           </div>
