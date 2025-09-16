@@ -48,7 +48,7 @@ function VisualizeData({
                   }  min-w-44 opacity-70 hover:opacity-100 hover:text-black transition-all duration-300 ease-in-out rounded shadow-md p-1 transform hover:-translate-y-1`}
                   style={{
                     boxShadow: isActive
-                      && `1px 1px 1px 1px ${hoverEffectDatabases["color"]}`,
+                      && `0px 2px 1px ${hoverEffectDatabases["color"]}`,
                       
                     
                   }}
