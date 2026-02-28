@@ -2,9 +2,8 @@ import Plot from "react-plotly.js";
 import { useEffect, useState } from "react";
 import * as genotoxApi from "../service/genotoxService";
 import { motion } from "framer-motion";
-function PieChart({ cas_rn,setHoverEffectDatabases }) {
+function PieChart({ casNum,setHoverEffectDatabases }) {
   const [data, setData] = useState<any>(undefined);
-
   const formatData = (labels, data) => {
     const result = {
       Negative: [],
@@ -25,7 +24,7 @@ function PieChart({ cas_rn,setHoverEffectDatabases }) {
 
   const getData = async () => {
     const formData = new FormData();
-    formData.append("cas_rn", cas_rn);
+    formData.append("cas_rn", casNum);
     const response = await genotoxApi.getPieChartData(formData);
     const totals = response.data.pie_chart_data["overall_totals"];
     const labels = ["Conflicted", "Equivocal", "Negative", "Positive"];

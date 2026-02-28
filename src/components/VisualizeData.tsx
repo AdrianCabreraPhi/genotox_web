@@ -10,7 +10,7 @@ function VisualizeData({
 }) {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const keys = Object.keys(result);
-
+  
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -68,9 +68,9 @@ function VisualizeData({
           value={selectedDatabase}
           onChange={handleChangeDatabase}
         >
-          {keys.map((key, index) => {
+          {keys.map((key) => {
             if (result[key] !== null) {
-              return <option value={key}>{key}</option>;
+              return <option key={key} value={key}>{key}</option>;
             }
           })}
         </select>

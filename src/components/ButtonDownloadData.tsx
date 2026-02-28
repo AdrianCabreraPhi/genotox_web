@@ -4,6 +4,7 @@ type ButtonDownloadDataProps = {
   downloadData: () => void
 }
 function ButtonDownloadData(props: ButtonDownloadDataProps) {
+
   return (
     <button
       onClick={props.downloadData}
