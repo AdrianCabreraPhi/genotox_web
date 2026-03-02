@@ -7,7 +7,7 @@ type formDataQueryProps = {
   handleSubmittedCasNum: (casNum: string) => void;
 };
 
-function FormDataQuery(props: formDataQueryProps) {
+function Form(props: formDataQueryProps) {
   const { isLoading, executeQuery } = useGenotoxQuery(
     props.setResult,
     props.handleSubmittedCasNum,
@@ -68,4 +68,4 @@ function FormDataQuery(props: formDataQueryProps) {
   );
 }
 
-export default FormDataQuery;
+export default Form;
