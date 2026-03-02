@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import useIsMobile from "../hooks/useIsMobile";
 
 function VisualizeData({
   result,
@@ -8,21 +8,10 @@ function VisualizeData({
   setSelectedDatabase,
   hoverEffectDatabases,
 }) {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const keys = Object.keys(result);
   
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
+  const keys = Object.keys(result);
+  const isMobile = useIsMobile();
+  
   return (
     <motion.div
       initial={{ opacity: 0 }}
